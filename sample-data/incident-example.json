@@ -1,0 +1,14 @@
+{
+  "incident_id": "INC-TRAINING-0001",
+  "environment": "production-simulation",
+  "service": "checkout-api",
+  "priority": "P2",
+  "region": "ap-south-1",
+  "detected_at": "2026-11-25T09:20:00+05:30",
+  "impact": "Fictional training example; no customer data",
+  "observations": ["HealthyHostCount fell from 4 to 0", "Health checks returned 404", "A release occurred shortly before alert"],
+  "hypothesis": "Health endpoint changed without updating target group configuration",
+  "mitigation": "Training only: approved rollback to known-good release",
+  "validation": ["Healthy targets recovered", "Synthetic checkout passed", "5xx returned to baseline"],
+  "preventive_actions": ["Health endpoint contract test", "Release gate on target health", "HealthyHostCount alarm"]
+}

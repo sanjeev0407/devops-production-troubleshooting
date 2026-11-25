@@ -1,0 +1,24 @@
+# Select correct log group and time range; fields depend on your log format.
+fields @timestamp, @message, @logStream
+| filter @message like /(?i)(error|exception|fatal)/
+| sort @timestamp desc
+| limit 100
+
+fields @message
+| filter @message like /(?i)(error|exception)/
+| stats count() as occurrences by bin(5m)
+
+fields @timestamp, path, status, durationMs, requestId
+| filter durationMs > 1000
+| sort durationMs desc
+| limit 100
+
+fields @timestamp, path, status
+| filter status >= 500
+| stats count() as errors by path, bin(5m)
+| sort errors desc
+
+fields @timestamp, @message
+| filter @message like /REPLACE_WITH_REQUEST_ID/
+| sort @timestamp asc
+| limit 200

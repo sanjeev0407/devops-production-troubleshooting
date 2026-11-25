@@ -1,0 +1,27 @@
+name: Repository checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  required-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify project files
+        run: |
+          test -f README.md
+          test -f INCIDENT_MANAGEMENT.md
+          test -f RCA_TEMPLATE.md
+          test -f RUNBOOK_INDEX.md
+          test -d runbooks
+          test -d scenarios
+          echo "Required project files present."
+      - name: Scan common AWS access key patterns
+        run: |
+          if grep -RniE 'AKIA[0-9A-Z]{16}|aws_secret_access_key[[:space:]]*=' . --exclude-dir=.git; then
+            echo "Potential credential pattern found."
+            exit 1
+          fi
